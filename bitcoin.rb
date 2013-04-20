@@ -55,8 +55,6 @@ end
 @usd_old = 0.0;
 @eur_old = 0.0;
 
-@port.puts "C=\n"
-@port.puts "w=0505:Fetching Data ...\n"
 loop {
   responseusd =  Net::HTTP.get('data.mtgox.com', '/api/1/BTCUSD/ticker')
   parsedusd = JSON.parse(responseusd)
@@ -65,7 +63,6 @@ loop {
   responseeur =  Net::HTTP.get('data.mtgox.com', '/api/1/BTCEUR/ticker')
   parsedeur = JSON.parse(responseeur)
   eur = parsedeur["return"]["last_local"]["value"].to_f
-  @port.puts "C=\n"
   @port.puts "f=normal\n"
   @port.puts "c=orange\n"
   @port.puts "w=0001:A\n"
@@ -73,11 +70,11 @@ loop {
 
   @port.puts "c=#{check_usd(usd)}\n"
   @port.puts "f=small\n"
-  @port.puts "w=0701:#{'%.2f' % usd}\n"
+  @port.puts "W=2600:#{('%.2f' % usd).to_s.reverse!}\n"
 
   @port.puts "c=#{check_eur(eur)}\n"
-  @port.puts "f=small\n"
-  @port.puts "w=0709:#{'%.2f' % eur}\n"
+  @port.puts "W=2607:#{('%.2f' % eur).to_s.reverse!}\n"
+  @port.puts "C=\n"
   @eur_old = eur
   @usd_old = usd
   if @options[:console] == true

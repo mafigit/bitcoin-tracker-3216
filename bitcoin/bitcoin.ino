@@ -401,11 +401,11 @@ int zero_s[7] = {
 int one_s[7] = {
   B0000000,
   B0000000,
-  B0001000,
-  B0001000,
-  B0001000,
-  B0001000,
-  B0001000
+  B0000100,
+  B0001100,
+  B0000100,
+  B0000100,
+  B0000100
 };
 int two_s[7] = {
   B0000000,
@@ -428,7 +428,7 @@ int three_s[7] = {
 int four_s[7] = {
   B0000000,
   B0000000,
-  B0001100,
+  B0010100,
   B0010100,
   B0011100,
   B0000100,
@@ -458,8 +458,8 @@ int seven_s[7] = {
   B0011100,
   B0000100,
   B0000100,
-  B0000100,
-  B0000100
+  B0001000,
+  B0001000
 };
 int eight_s[7] = {
   B0000000,
@@ -486,7 +486,7 @@ int dot_s[7] = {
   B0000000,
   B0000000,
   B0000000,
-  B0010000
+  B0001000
 };
 int dollar_s[7] = {
   B0001000,
@@ -507,6 +507,24 @@ int euro_s[7] = {
   B0011100
 };
 
+char mat_new[512] = {
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',
+  'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b'
+};
 
 
 
@@ -603,17 +621,51 @@ void draw_final(int array[7]) {
     for (int l=0; l<=6; l++) {
       if(final_array[l][k] == 1) {
         if(color == 0) {
-          matrix->plot(k+xpos,l+ypos,RED);
+          new_plot(k+xpos,l+ypos,0);
         }
         if(color == 1) {
-          matrix->plot(k+xpos,l+ypos,GREEN);
+          new_plot(k+xpos,l+ypos,1);
         }
         if(color == 2) {
-          matrix->plot(k+xpos,l+ypos,ORANGE);
+          new_plot(k+xpos,l+ypos,2);
         }
       }
     }
   }
+}
+void new_plot(int xpos, int ypos, int color) {
+  if(color == 0) {
+    mat_new[xpos  +32 * ypos] = 'r';
+  }
+  if(color == 1) {
+    mat_new[xpos +32 * ypos] = 'g';
+  }
+  if(color == 2) {
+    mat_new[xpos +32 * ypos] = 'o';
+  }
+}
+
+void new_render() {
+  for(int y=0; y<16; y = y++) {
+    for(int x=0; x<32; x++) {
+      if(mat_new[y * 32 + x] == 'r') {
+        matrix->plot(x,y,RED);
+      }
+      if(mat_new[y * 32 + x] == 'g') {
+        matrix->plot(x,y,GREEN);
+      }
+      if(mat_new[y * 32 + x] == 'o') {
+        matrix->plot(x,y,ORANGE);
+      }
+      if(mat_new[y * 32 + x] == 'b') {
+        matrix->plot(x,y,BLACK);
+      }
+    }
+  }
+  for(int i=0; i<512; i++) {
+    mat_new[i] = 'b';
+  }
+  matrix->render();
 }
 
 int cursor_posx = 0;
@@ -640,14 +692,35 @@ void loop()
               cursor_posx = cursor_posx + 2;
             else
               cursor_posx = cursor_posx + 6;
-            matrix->render();
           }
           if(font == 1) {
             if(letter == '.')
               cursor_posx = cursor_posx + 2;
             else
               cursor_posx = cursor_posx + 4;
-            matrix->render();
+          }
+        }
+      }
+      if(buffer.substring(0,2) == "W=") {
+        String position = buffer.substring(buffer.indexOf('=')+1,buffer.indexOf(':'));
+
+        cursor_posx = position.substring(0,2).toInt();
+        cursor_posy = position.substring(2,4).toInt();
+
+        for(int i=buffer.indexOf(':')+1;i <= buffer.length();i++) {
+          char letter = buffer.charAt(i);
+          drawletter(letter, cursor_posx, cursor_posy);
+          if(font == 0) {
+            if(letter == '.')
+              cursor_posx = cursor_posx - 2;
+            else
+              cursor_posx = cursor_posx - 6;
+          }
+          if(font == 1) {
+            if(letter == '1')
+              cursor_posx = cursor_posx - 3;
+            else
+              cursor_posx = cursor_posx - 4;
           }
         }
       }
@@ -663,9 +736,22 @@ void loop()
           color = 2;
         }
       }
+      if(buffer.substring(0,2) == "N=") {
+        for(int i=0;i<32;i++) {
+          for(int j=0;j<16;j++) {
+            int rnd = random(0,3);
+            if(rnd == 0)
+              matrix->plot(i,j,RED);
+            if(rnd == 1)
+              matrix->plot(i,j,GREEN);
+            if(rnd == 2)
+              matrix->plot(i,j,ORANGE);
+          }
+          matrix->render();
+        }
+      }
       if(buffer.substring(0,2) == "C=") {
-        matrix->clear();
-        matrix->render();
+        new_render();
       }
       if(buffer.substring(0,2) == "f=") {
         String f = buffer.substring(buffer.indexOf('=')+1,buffer.length());
@@ -679,7 +765,6 @@ void loop()
       if(buffer.substring(0,2) == "b=") {
           drawletter('A', 0, 1);
           drawletter('B', 0, 8);
-          matrix->render();
       }
       buffer = "";
     }
