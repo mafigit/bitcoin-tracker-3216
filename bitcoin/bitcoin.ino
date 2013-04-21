@@ -12,6 +12,7 @@ void setup()
 {
   Serial.begin(9600);
   matrix = new LEDMatrix(DATA_PIN, CLK_PIN, WRCLK_PIN, CS_PIN);
+  randomSeed(analogRead(0));
 }
 
 int xpos = 0;
@@ -748,6 +749,48 @@ void loop()
               matrix->plot(i,j,ORANGE);
           }
           matrix->render();
+        }
+      }
+
+      if(buffer.substring(0,2) == "A=") {
+        int x = 15;
+        int y = 8;
+        while(true) {
+          if (x > 31)
+            x--;
+          if (y > 15)
+            y--;
+          if (x < 0)
+            x++;
+          if (y < 0)
+            y++;
+
+          int dir = random(0,4);
+          if(dir == 0) {
+            x++;
+            matrix->plot(x,y,BLACK);
+            matrix->plot(x,y,RED);
+            matrix->render();
+          }
+          if(dir == 1) {
+            x--;
+            matrix->plot(x,y,BLACK);
+            matrix->plot(x,y,RED);
+            matrix->render();
+          }
+          if(dir == 2) {
+            y++;
+            matrix->plot(x,y,BLACK);
+            matrix->plot(x,y,RED);
+            matrix->render();
+          }
+          if(dir == 3) {
+            y--;
+            matrix->plot(x,y,BLACK);
+            matrix->plot(x,y,RED);
+            matrix->render();
+          }
+          delay(10);
         }
       }
       if(buffer.substring(0,2) == "C=") {
